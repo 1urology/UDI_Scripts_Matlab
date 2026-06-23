@@ -27,6 +27,14 @@ This approach enables detection of **non-voiding contractions (NVCs)** — the m
 
 ![Urodynamic Setup](urodynamic_setup.png)
 
+> **Figure source:** Schneider MP, Hughes FM Jr, Engmann AK, Purves JT, Kasper H, Tedaldi M, Spruill LS, Gullo M, Schwab ME, Kessler TM. A novel urodynamic model for lower urinary tract assessment in awake rats. *BJU Int.* 2015 Apr;115 Suppl 6:8–15. doi: [10.1111/bju.13039](https://doi.org/10.1111/bju.13039). PMID: 25597776.
+>
+> **(a)** Scheme of the urodynamic setup. **(b)** Urodynamic laboratory station. **(c)** Intraoperative view of the urethra after bilateral implantation of the EUS-EMG electrodes. **(d)** Intraoperative view of the bladder dome after implantation of the bladder catheter. **(e)** Rat with harness affixed. **(f)** Study timeline. Numbers in b–e relate to the legend in a.
+>
+> This setup was originally designed and validated for use in **awake rats**. It was subsequently adapted and refined by our laboratory for use in **awake mice**, enabling simultaneous recording of intravesical pressure, EUS-EMG, and voided volumes in mouse models of spinal cord injury (SCI) and partial bladder outlet obstruction (pBOO).
+
+**Mouse adaptation reference:** von Siebenthal M, Akshay A, Besic M, Schneider MP, Hashemi Gheinani A, Burkhard FC, Monastyrskaya K. Molecular Characterization of Non-Neurogenic and Neurogenic Lower Urinary Tract Dysfunction (LUTD) in SCI-Induced and Partial Bladder Outlet Obstruction Mouse Models. *Int J Mol Sci.* 2023 Feb;24(3):2451. doi: [10.3390/ijms24032451](https://doi.org/10.3390/ijms24032451). PMID: 36768773. PMCID: PMC9916488.
+
 ```
 Saline infusion pump (20 µL/min for SCI)
         │
