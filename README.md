@@ -1,7 +1,7 @@
-# 🫀 UDI Matlab Analysis Pipeline
+# UDI Matlab Analysis Pipeline
 ### Urodynamic Investigation in Awake Mice — Functional Urology Research Laboratory
 **Department of Biomedical Research (DBMR), University of Bern**
-*Pragya Nagar · Ali Hashemi Gheinani*
+*Pragya Nagar, Chaimae Bahou, Pedro Perreira Amado, Katia Monastyrskaya-Stäuber, Ali Hashemi Gheinani*
 
 ---
 
@@ -11,13 +11,15 @@
 
 | Channel | What it measures |
 |---|---|
-| 🩺 **Intravesical pressure** | Detrusor muscle contractions |
-| ⚡ **EUS-EMG** | External urethral sphincter activity |
-| ⚖️ **Voided volume** | Urine output via precision scale (5 Hz) |
+| **Intravesical pressure** | Detrusor muscle contractions |
+| **EUS-EMG** | External urethral sphincter activity |
+| **Voided volume** | Urine output via precision scale (5 Hz) |
 
 This approach enables detection of **non-voiding contractions (NVCs)** — the mouse equivalent of detrusor overactivity in humans — and **detrusor-sphincter dyssynergia (DSD)**, both key features of neurogenic lower urinary tract dysfunction (NLUTD).
 
 > **Clinical relevance:** The pipeline supports research in **spinal cord injury (SCI)**, **partial bladder outlet obstruction (pBOO)**, and related models of bladder dysfunction.
+
+**Reference:** Schneider MP, Hughes FM Jr, Engmann AK, Purves JT, Kasper H, Tedaldi M, Spruill LS, Gullo M, Schwab ME, Kessler TM. A novel urodynamic model for lower urinary tract assessment in awake rats. *BJU Int.* 2015 Apr;115 Suppl 6:8–15. doi: [10.1111/bju.13039](https://doi.org/10.1111/bju.13039). PMID: 25597776.
 
 ---
 
