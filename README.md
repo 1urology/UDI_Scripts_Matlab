@@ -25,6 +25,8 @@ This approach enables detection of **non-voiding contractions (NVCs)** — the m
 
 ## Experimental Setup
 
+![Urodynamic Setup](urodynamic_setup.png)
+
 ```
 Saline infusion pump (20 µL/min for SCI)
         │
@@ -229,3 +231,12 @@ Animal_ID/               e.g. 189L/
 **Functional Urology Research Laboratory**
 Department for BioMedical Research (DBMR), University of Bern
 GitHub: [github.com/1urology](https://github.com/1urology)
+
+---
+
+| | |
+|---|---|
+| **Dr. Ali Hashemi Gheinani** | **Prof. Dr. Katia Monastyrskaya-Stäuber** |
+| Group Leader | Group Leader |
+| ali.hashemi@unibe.ch | katia.monastyrskaia@unibe.ch |
+| [Hashemi Gheinani Lab](https://www.dbmr.unibe.ch/research/research_programs/monastyrskaya_lab/index_eng.html) | [Monastyrskaya Lab](https://www.dbmr.unibe.ch/research/research_programs/hashemi_gheinani_lab/index_eng.html) |
