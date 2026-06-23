@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UDI Matlab Analysis Pipeline — Functional Urology Lab, University of Bern</title>
+  <style>
+    :root {
+      --navy: #1a2e4a;
+      --blue: #2c5f8a;
+      --light-blue: #e8f0f8;
+      --accent: #c8102e;
+      --text: #1e1e1e;
+      --muted: #555;
+      --border: #d0d7de;
+      --bg: #ffffff;
+      --section-bg: #f6f8fa;
+      --font: 'Georgia', 'Times New Roman', serif;
+      --mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--navy);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      height: 52px;
+    }
+    nav a {
+      color: #c9d6e3;
+      text-decoration: none;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.2rem 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    nav a:hover { color: #fff; border-bottom-color: #c8102e; }
+    nav .nav-brand {
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-right: auto;
+      letter-spacing: 0.02em;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #254a6e 100%);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+    .hero .label {
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #a8c4dc;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: normal;
+      line-height: 1.3;
+      margin-bottom: 0.8rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero h1 span { color: #a8c4dc; }
+    .hero .subtitle {
+      font-family: sans-serif;
+      font-size: 1rem;
+      color: #c9d6e3;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .hero .authors {
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      color: #a8c4dc;
+      margin-bottom: 2rem;
+    }
+    .btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: 4px;
+      font-family: sans-serif;
+      font-size: 0.875rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #c8102e; color: #fff; }
+    .btn-outline { background: transparent; color: #fff; border: 1.5px solid #a8c4dc; }
+
+    /* LAYOUT */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 4rem 0; }
+    section:nth-child(even) { background: var(--section-bg); }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: normal;
+      color: var(--navy);
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+      padding-bottom: 0.3rem;
+      margin-bottom: 1.8rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--blue);
+      margin: 1.8rem 0 0.6rem;
+      font-weight: bold;
+      font-family: sans-serif;
+    }
+
+    p { margin-bottom: 1rem; color: var(--text); }
+
+    /* ABSTRACT BOX */
+    .abstract-box {
+      background: var(--light-blue);
+      border-left: 4px solid var(--blue);
+      padding: 1.4rem 1.6rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1.5rem 0;
+      font-style: italic;
+      color: #2a2a2a;
+    }
+
+    /* FIGURE */
+    .figure-wrap {
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .figure-wrap img {
+      max-width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .figure-caption {
+      font-family: sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.8rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+    .figure-caption strong { color: var(--text); }
+
+    /* PIPELINE */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 2rem 0;
+      max-width: 680px;
+    }
+    .pipeline-step {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+    }
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 48px;
+      flex-shrink: 0;
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .step-line {
+      width: 2px;
+      flex: 1;
+      background: var(--border);
+      margin: 2px 0;
+    }
+    .pipeline-step:last-child .step-line { display: none; }
+    .step-content {
+      padding: 0 0 1.8rem 1rem;
+      flex: 1;
+    }
+    .step-content h4 {
+      font-family: sans-serif;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+    .step-content p {
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: sans-serif;
+      font-size: 0.875rem;
+      margin: 1.2rem 0;
+    }
+    th {
+      background: var(--navy);
+      color: #fff;
+      text-align: left;
+      padding: 0.6rem 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    td {
+      padding: 0.55rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:nth-child(even) td { background: var(--section-bg); }
+    tr:hover td { background: var(--light-blue); }
+    td code, th code {
+      background: #e8ecf0;
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+    td a { color: var(--blue); }
+
+    /* NVC DIAGRAM */
+    .nvc-diagram {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      background: #f0f4f8;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.6rem;
+      line-height: 1.9;
+      color: var(--text);
+      overflow-x: auto;
+    }
+
+    /* NAMING CONVENTION */
+    .naming-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .naming-box {
+      background: var(--section-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.2rem;
+    }
+    .naming-box h4 {
+      font-family: sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+    .naming-box table { margin: 0; }
+    .naming-box th { font-size: 0.78rem; padding: 0.4rem 0.7rem; }
+    .naming-box td { font-size: 0.82rem; padding: 0.35rem 0.7rem; }
+
+    /* REQUIREMENTS */
+    .req-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+    .req-list li {
+      background: var(--section-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+    }
+    .req-list li strong {
+      display: block;
+      color: var(--navy);
+      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
+    }
+    .req-list li span { color: var(--muted); }
+
+    /* CITATIONS */
+    .citation {
+      background: var(--section-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.2rem;
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .citation .doi { color: var(--blue); }
+    .citation .pmid { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .contact-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: #fff;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    }
+    .contact-card .role {
+      font-family: sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .contact-card h3 {
+      font-size: 1.05rem;
+      color: var(--navy);
+      margin: 0 0 0.8rem;
+      font-family: sans-serif;
+    }
+    .contact-card p {
+      font-family: sans-serif;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0.2rem 0;
+    }
+    .contact-card a { color: var(--blue); text-decoration: none; }
+    .contact-card a:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy);
+      color: #a8c4dc;
+      text-align: center;
+      padding: 2rem;
+      font-family: sans-serif;
+      font-size: 0.82rem;
+    }
+    footer a { color: #c9d6e3; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.6rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .naming-grid { grid-template-columns: 1fr; }
+      nav { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand">1urology / UDI Matlab</span>
+  <a href="#overview">Overview</a>
+  <a href="#setup">Setup</a>
+  <a href="#pipeline">Pipeline</a>
+  <a href="#scripts">Scripts</a>
+  <a href="#output">Output</a>
+  <a href="#references">References</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="label">Functional Urology Research Laboratory &mdash; University of Bern</div>
+  <h1>UDI Matlab <span>Analysis Pipeline</span></h1>
+  <p class="subtitle">Urodynamic Investigation in Awake Mice &mdash; Simultaneous recording of intravesical pressure, EUS-EMG and voided volumes</p>
+  <p class="authors">Pragya Nagar &nbsp;&middot;&nbsp; Chaimae Bahou &nbsp;&middot;&nbsp; Pedro Perreira Amado &nbsp;&middot;&nbsp; Katia Monastyrskaya-Stäuber &nbsp;&middot;&nbsp; Ali Hashemi Gheinani</p>
+  <div class="btn-row">
+    <a class="btn btn-primary" href="https://github.com/1urology/UDI_Scripts_Matlab">View on GitHub</a>
+    <a class="btn btn-outline" href="https://github.com/1urology/UDI_Scripts_Matlab/archive/refs/heads/main.zip">Download Scripts</a>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <h2>Overview</h2>
+    <div class="abstract-box">
+      Urodynamic investigations (UDI) combined with electromyography (EMG) allow simultaneous recording of bladder pressure, external urethral sphincter activity, and voided volumes in fully awake mice. This methodology enables detection of non-voiding contractions (NVCs) equivalent to detrusor overactivity in humans, and detrusor-sphincter dyssynergia (DSD) &mdash; key hallmarks of neurogenic lower urinary tract dysfunction. This Matlab pipeline performs automated analysis of UDI recordings from both TDMS (LabVIEW) and CSV data formats.
+    </div>
+
+    <h3>What the pipeline measures</h3>
+    <table>
+      <thead><tr><th>Channel</th><th>Signal</th><th>Sampling</th></tr></thead>
+      <tbody>
+        <tr><td>Intravesical pressure</td><td>Detrusor muscle contractions</td><td>500 Hz</td></tr>
+        <tr><td>EUS-EMG</td><td>External urethral sphincter activity</td><td>500 Hz</td></tr>
+        <tr><td>Voided volume</td><td>Urine output via precision scale</td><td>5 Hz</td></tr>
+      </tbody>
+    </table>
+
+    <p>The pipeline supports research in <strong>spinal cord injury (SCI)</strong>, <strong>partial bladder outlet obstruction (pBOO)</strong>, and related models of lower urinary tract dysfunction (LUTD).</p>
+  </div>
+</section>
+
+<!-- SETUP -->
+<section id="setup" style="background: var(--section-bg);">
+  <div class="container">
+    <h2>Experimental Setup</h2>
+
+    <div class="figure-wrap">
+      <img src="urodynamic_setup.png" alt="Urodynamic setup — Schneider et al., 2015" />
+      <div class="figure-caption">
+        <strong>Figure: Urodynamic setup.</strong>
+        (a) Scheme of the urodynamic setup. (b) Urodynamic laboratory station. (c) Intraoperative view of the urethra after bilateral implantation of the EUS-EMG electrodes. (d) Intraoperative view of the bladder dome after implantation of the bladder catheter. (e) Animal with harness affixed. (f) Study timeline. Numbers in b&ndash;e relate to the legend in a.
+        <br/>
+        Image reproduced from <strong>Schneider et al., <em>BJU Int.</em> 2015</strong> (doi: <a href="https://doi.org/10.1111/bju.13039">10.1111/bju.13039</a>).
+        This setup was originally designed and validated for use in <strong>awake rats</strong> and subsequently adapted and refined by our laboratory for use in <strong>awake mice</strong>.
+      </div>
+    </div>
+
+    <h3>Signal flow</h3>
+    <table>
+      <thead><tr><th>Component</th><th>Model</th></tr></thead>
+      <tbody>
+        <tr><td>Infusion pump</td><td>R-100EC, Razel Scientific Instruments</td></tr>
+        <tr><td>In-line pressure transducer</td><td>TDR-100-1, Med Associates Inc.</td></tr>
+        <tr><td>Pressure signal amplifier</td><td>CSG-6080, Catamount R&amp;D Inc.</td></tr>
+        <tr><td>EMG amplifier</td><td>Model 1700, Science Products GmbH</td></tr>
+        <tr><td>Data acquisition board</td><td>NI USB-6211, National Instruments</td></tr>
+        <tr><td>Recording software</td><td>LabVIEW v2012 (custom UroDyn2.exe)</td></tr>
+        <tr><td>Scale (voided volume)</td><td>5 Hz sampling</td></tr>
+      </tbody>
+    </table>
+
+    <p>Data is saved as <code>.tdms</code> files (NI LabVIEW format). For experiments using the newer acquisition software, data is exported as paired <code>pressure.csv</code> and <code>scale.csv</code> files. Infusion rate is set to <strong>20 &micro;L/min</strong> for SCI experiments.</p>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="container">
+    <h2>Analysis Pipeline</h2>
+
+    <div class="pipeline">
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">1</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>Load and preprocess</h4>
+          <p>Read .tdms or .csv file. Extract pressure, scale, and EMG channels. Compute sampling rates. Normalize time vectors and align signals.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">2</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>Visual inspection and cycle selection</h4>
+          <p>Plot full normalized recording (pressure + scale). User clicks to select the start and end of a micturition cycle interactively (ginput).</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">3</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>Peak and threshold detection</h4>
+          <p>Detect Pmax (peak pressure) and Pbase (minimum). Apply derivative-based threshold detection (65% of maximum dP/dt within the contraction window). Segment filling, contraction, and baseline phases.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">4</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>NVC and contraction classification</h4>
+          <p>Detect non-voiding contractions (NVCs) in the filling phase using a smoothed filtered signal. Classify peaks into five tiers: 15%, 5%, 2% above threshold, at threshold, sub-threshold, and microcontractions.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">5</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>Compliance and voided volume</h4>
+          <p>Calculate bladder compliance from filling duration and threshold pressure. Compute voided volume from positive scale changes over the whole cycle and the peak window.</p>
+        </div>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-left"><div class="step-num">6</div><div class="step-line"></div></div>
+        <div class="step-content">
+          <h4>Export figures and CSV results</h4>
+          <p>Save publication-quality figures (overview, compliance window, NVC summary). Write all parameters to a results CSV file named by animal ID and recording timestamp.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>NVC classification scheme</h3>
+    <div class="nvc-diagram">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pmax  (voiding contraction peak)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+ -- 15% above threshold ----+----  NVC_15   strong non-voiding contractions
+ --  5% above threshold ----+----  NVC_5
+ --  2% above threshold ----+----  NVC_2
+ -- Pthresh (voiding onset)-+----  NVC       at-threshold contractions
+ -- Sub-threshold ----------+----  sub-NVC
+ -- Micro cutoff -----------+----  microcontractions  (noise-adaptive)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pbase (baseline pressure)
+    </div>
+
+    <h3>Variable naming convention</h3>
+    <div class="naming-grid">
+      <div class="naming-box">
+        <h4>Scope prefix</h4>
+        <table>
+          <thead><tr><th>Prefix</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>e_</code></td><td>Entire recording</td></tr>
+            <tr><td><code>z_</code></td><td>Zoom — one micturition cycle</td></tr>
+            <tr><td><code>w_</code></td><td>Window — around pressure peak</td></tr>
+            <tr><td><code>a_</code></td><td>All cycles (SCI measurements)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="naming-box">
+        <h4>Type suffix</h4>
+        <table>
+          <thead><tr><th>Suffix</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>_tsp</code></td><td>Timestamp (seconds)</td></tr>
+            <tr><td><code>_idx</code></td><td>Array index</td></tr>
+            <tr><td><code>_val</code></td><td>Numeric value</td></tr>
+            <tr><td><code>_logi</code></td><td>Logical mask (0/1)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p style="font-family:sans-serif;font-size:0.85rem;color:var(--muted);">Example: <code>z_val_nPmax</code> = normalized maximum pressure within the selected micturition cycle.</p>
+  </div>
+</section>
+
+<!-- SCRIPTS -->
+<section id="scripts" style="background:var(--section-bg);">
+  <div class="container">
+    <h2>Scripts</h2>
+
+    <h3>Main analysis scripts</h3>
+    <table>
+      <thead><tr><th>Script</th><th>Use case</th><th>Input</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Sham_for_tdms_31032026.m">Sham_for_tdms_31032026.m</a></td><td>Full Sham analysis</td><td>.tdms</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Sham_for_csv_19032026.m">Sham_for_csv_19032026.m</a></td><td>Full Sham analysis</td><td>.csv</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/SCI_24.08.2024.m">SCI_24.08.2024.m</a></td><td>SCI model analysis</td><td>.tdms / .csv</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Sham_24.08.2024.m">Sham_24.08.2024.m</a></td><td>Sham (legacy)</td><td>.tdms / .csv</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Sham_compliance_23.07.2025.m">Sham_compliance_23.07.2025.m</a></td><td>Compliance-focused analysis</td><td>.tdms / .csv</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Timeseriesfiles_24042025.m">Timeseriesfiles_24042025.m</a></td><td>Export timeseries to CSV</td><td>.tdms</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/Plotting_tracings.m">Plotting_tracings.m</a></td><td>Publication-quality plots</td><td>.tdms</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/All_codes_summary_PN.m">All_codes_summary_PN.m</a></td><td>Code reference summary</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Helper functions</h3>
+    <table>
+      <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findpeak.m">findpeak.m</a></td><td>Index and value of maximum pressure</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findmin.m">findmin.m</a></td><td>Index and value of minimum pressure</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findselection.m">findselection.m</a></td><td>Indices within a user-selected time range</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findtimewindow.m">findtimewindow.m</a></td><td>Pre/post window around pressure peak</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findpre.m">findpre.m</a></td><td>Pre-peak filling phase indices</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findpost.m">findpost.m</a></td><td>Post-peak indices</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findsection.m">findsection.m</a></td><td>Contraction phase (Pthresh to Pmax)</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findprolongedsection.m">findprolongedsection.m</a></td><td>Extended section (&plusmn;1 s) for smooth boundary handling</td></tr>
+        <tr><td><a href="https://github.com/1urology/UDI_Scripts_Matlab/blob/main/findprolsection.m">findprolsection.m</a></td><td>Extended section (&plusmn;5000 pts) for smooth boundary handling</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- OUTPUT -->
+<section id="output">
+  <div class="container">
+    <h2>Output Parameters</h2>
+    <p>Each analysis run exports a <code>.csv</code> row and a set of figures. Parameters saved per recording:</p>
+    <table>
+      <thead><tr><th>Parameter</th><th>Unit</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>Number of peaks</td><td>—</td><td>Detected voiding contractions</td></tr>
+        <tr><td>Peak pressure (Pmax)</td><td>cmH&sub2;O</td><td>Maximum detrusor pressure</td></tr>
+        <tr><td>Normalized Pmax (nPmax)</td><td>cmH&sub2;O</td><td>Pmax &minus; Pbase</td></tr>
+        <tr><td>Micturition cycle duration</td><td>min</td><td>Full cycle length</td></tr>
+        <tr><td>Threshold pressure (Pthresh)</td><td>cmH&sub2;O</td><td>Pressure at voiding onset (derivative-based)</td></tr>
+        <tr><td>Pthresh &rarr; Pmax amplitude</td><td>cmH&sub2;O</td><td>Contraction pressure range</td></tr>
+        <tr><td>Voided volume (whole cycle)</td><td>&micro;L</td><td>Total urine output in cycle</td></tr>
+        <tr><td>Voided volume (peak window)</td><td>&micro;L</td><td>Output around pressure peak</td></tr>
+        <tr><td>NVCs &ge;15% above threshold</td><td>count</td><td>Strong non-voiding contractions</td></tr>
+        <tr><td>NVCs at threshold</td><td>count</td><td>Threshold-level NVCs</td></tr>
+        <tr><td>NVCs 5% / 2% above threshold</td><td>count</td><td>Graded NVC classification</td></tr>
+        <tr><td>Sub-threshold contractions</td><td>count</td><td>Below voiding threshold</td></tr>
+        <tr><td>Microcontractions</td><td>count</td><td>Noise-adaptive small contractions</td></tr>
+        <tr><td>Bladder compliance</td><td>&micro;L/cmH&sub2;O</td><td>Filling phase compliance</td></tr>
+        <tr><td>Volume filled</td><td>&micro;L</td><td>Saline instilled during filling phase</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Requirements</h3>
+    <ul class="req-list">
+      <li><strong>MATLAB</strong><span>R2018b or later</span></li>
+      <li><strong>Signal Processing Toolbox</strong><span>smooth, findpeaks</span></li>
+      <li><strong>TDMS File Reader</strong><span>TDMS_readTDMSFile (MathWorks File Exchange)</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references" style="background:var(--section-bg);">
+  <div class="container">
+    <h2>References</h2>
+
+    <div class="citation">
+      Schneider MP, Hughes FM Jr, Engmann AK, Purves JT, Kasper H, Tedaldi M, Spruill LS, Gullo M, Schwab ME, Kessler TM.
+      <strong>A novel urodynamic model for lower urinary tract assessment in awake rats.</strong>
+      <em>BJU Int.</em> 2015 Apr;115 Suppl 6:8&ndash;15.
+      <br/>
+      <span class="doi">doi: <a href="https://doi.org/10.1111/bju.13039">10.1111/bju.13039</a></span>
+      <div class="pmid">PMID: 25597776 &nbsp;&middot;&nbsp; Free article</div>
+    </div>
+
+    <div class="citation">
+      von Siebenthal M, Akshay A, Besic M, Schneider MP, Hashemi Gheinani A, Burkhard FC, Monastyrskaya K.
+      <strong>Molecular Characterization of Non-Neurogenic and Neurogenic Lower Urinary Tract Dysfunction (LUTD) in SCI-Induced and Partial Bladder Outlet Obstruction Mouse Models.</strong>
+      <em>Int J Mol Sci.</em> 2023 Feb;24(3):2451.
+      <br/>
+      <span class="doi">doi: <a href="https://doi.org/10.3390/ijms24032451">10.3390/ijms24032451</a></span>
+      <div class="pmid">PMID: 36768773 &nbsp;&middot;&nbsp; PMCID: PMC9916488 &nbsp;&middot;&nbsp; Open access</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <h2>Contact</h2>
+    <p>Department for BioMedical Research (DBMR), University of Bern &mdash; Functional Urology Research Laboratory</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="role">Group Leader</div>
+        <h3>Dr. Ali Hashemi Gheinani</h3>
+        <p><a href="mailto:ali.hashemi@unibe.ch">ali.hashemi@unibe.ch</a></p>
+        <p><a href="https://www.dbmr.unibe.ch/research/research_programs/monastyrskaya_lab/index_eng.html">Hashemi Gheinani Lab &rarr;</a></p>
+      </div>
+      <div class="contact-card">
+        <div class="role">Group Leader</div>
+        <h3>Prof. Dr. Katia Monastyrskaya-Stäuber</h3>
+        <p><a href="mailto:katia.monastyrskaia@unibe.ch">katia.monastyrskaia@unibe.ch</a></p>
+        <p><a href="https://www.dbmr.unibe.ch/research/research_programs/hashemi_gheinani_lab/index_eng.html">Monastyrskaya Lab &rarr;</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Functional Urology Research Laboratory &mdash; Department for BioMedical Research (DBMR), University of Bern</p>
+  <p style="margin-top:0.4rem;"><a href="https://github.com/1urology/UDI_Scripts_Matlab">github.com/1urology/UDI_Scripts_Matlab</a></p>
+</footer>
+
+</body>
+</html>
